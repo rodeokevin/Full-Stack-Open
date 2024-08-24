@@ -41,14 +41,12 @@ const App = () => {
 
     noteService
       .update(id, changedNote)
-      .then(updatedNotes => {
-        setNotes(notes.map(n => n.id !== id ? n : updatedNotes))
+      .then(updatedNote => {
+        setNotes(notes.map(n => n.id !== id ? n : updatedNote))
       })
 
       .catch(error => {
-        setErrorMessage(
-          `Note '${note.content}' was already removed from server`
-        )
+        setErrorMessage(`Note '${note.content}' was already removed from server`)
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
@@ -76,6 +74,14 @@ const App = () => {
       .then(updatedNotes => {
         setNotes(notes.concat(updatedNotes))
         setNewNote('')
+      })
+      .catch(error => {
+        setErrorMessage(
+          error.response.data.error
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
   }
 
