@@ -33,7 +33,7 @@ const App = () => {
 
   const personsToShow = persons.filter(person => person.name.toLowerCase().startsWith(newFilter.toLowerCase()))
 
-  // Add or update a person
+  // Add a person
   const handleSubmit = (event) => {
     event.preventDefault()
 
@@ -50,6 +50,28 @@ const App = () => {
 
     const foundId = findId(newName)
 
+    personService
+      .create(newPersonObject)
+      .then(updatedPersons => {
+        setPersons(persons.concat(updatedPersons))
+        setNewName('')
+        setNewNumber('')
+        setSuccessMessage(`Added ${newName} to phonebook`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+      })
+      .catch(error => {
+        setNewName('')
+        setNewNumber('')
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+
+    // So this part was for part2, when we updated the phone number if we had same name
+    /*
     // Update a person
     if (foundId) {
       if (window.confirm(`${newName} is already added to phonebook. Replace the old number with a new one?`)) {
@@ -84,6 +106,7 @@ const App = () => {
         setSuccessMessage(null)
       }, 5000)
     }
+    */
   }
 
   return (
