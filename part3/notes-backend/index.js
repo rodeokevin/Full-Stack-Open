@@ -3,8 +3,6 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 
-const password = process.argv[2]
-
 // DO NOT SAVE YOUR PASSWORD TO GITHUB!!
 const url = process.env.MONGODB_URI
 
