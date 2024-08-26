@@ -44,34 +44,12 @@ const App = () => {
 
     // Find the id of the person we're trying to add
     const findId = (name) => {
-      const found = persons.find(person => person.name === name)
+      const found = persons.find(person => person.name.toLowerCase() === name.toLowerCase())
       return found ? found.id : null
     }
 
     const foundId = findId(newName)
 
-    personService
-      .create(newPersonObject)
-      .then(updatedPersons => {
-        setPersons(persons.concat(updatedPersons))
-        setNewName('')
-        setNewNumber('')
-        setSuccessMessage(`Added ${newName} to phonebook`)
-        setTimeout(() => {
-          setSuccessMessage(null)
-        }, 5000)
-      })
-      .catch(error => {
-        setNewName('')
-        setNewNumber('')
-        setErrorMessage(error.response.data.error)
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-      })
-
-    // So this part was for part2, when we updated the phone number if we had same name
-    /*
     // Update a person
     if (foundId) {
       if (window.confirm(`${newName} is already added to phonebook. Replace the old number with a new one?`)) {
@@ -88,7 +66,7 @@ const App = () => {
           .catch(() => {
             setNewName('')
             setNewNumber('')
-            setErrorMessage(`Information of ${newName} has already been removed from the server`),
+            setErrorMessage(`Information of ${newName} has already been removed from the server`)
             setTimeout(() => {
               setErrorMessage(null)
             }, 5000)})
@@ -98,15 +76,22 @@ const App = () => {
     else {
       personService
         .create(newPersonObject)
-        .then(updatedPersons => setPersons(persons.concat(updatedPersons)))
-      setNewName('')
-      setNewNumber('')
-      setSuccessMessage(`Added ${newName} to phonebook`)
-      setTimeout(() => {
-        setSuccessMessage(null)
-      }, 5000)
+        .then(updatedPersons => {
+          setPersons(persons.concat(updatedPersons))
+          setNewName('')
+          setNewNumber('')
+          setSuccessMessage(`Added ${newName} to phonebook`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
+        })
+        .catch(error => {
+          setErrorMessage(error.response.data.error)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
     }
-    */
   }
 
   return (
