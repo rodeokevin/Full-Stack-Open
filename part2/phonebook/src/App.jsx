@@ -42,7 +42,7 @@ const App = () => {
       number: newNumber,
     }
 
-    // Find the id of the person we're trying to add
+    // Find if the person already exists in phonebook
     const findId = (name) => {
       const found = persons.find(person => person.name.toLowerCase() === name.toLowerCase())
       return found ? found.id : null

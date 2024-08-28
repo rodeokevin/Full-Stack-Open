@@ -1,3 +1,5 @@
+// File for route handlers
+
 const notesRouter = require('express').Router()
 const Note = require('../models/note')
 
