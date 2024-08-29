@@ -71,7 +71,6 @@ const App = () => {
       title: newTitle,
       author: newAuthor,
       url: newURL,
-      likes: 0
     }
 
     // If the URL already exists, treat it as updating the title and author fields
