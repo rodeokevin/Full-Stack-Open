@@ -1,0 +1,11 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvZGVva2V2aW4iLCJpZCI6IjY2ZDE0ZDkxZmI3NGEzOTEzYmFjNmRjNSIsImlhdCI6MTcyNDk5NDQzN30.jA2I3dz8ltCTcFnZlGh0l92VY48wiuHpCdgXs0nb4Dc
+
+{
+    "title": "please",
+    "author": "mango",
+    "url": "fruit.com",
+    "likes": 0,
+    "userId": "66d14d91fb74a3913bac6dc5"
+}
