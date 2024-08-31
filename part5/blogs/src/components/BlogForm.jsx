@@ -67,15 +67,15 @@ const BlogForm = forwardRef(({ updateBlog, createBlog, blogs }, refs) => {
         <form onSubmit={addBlog}>
         Title:
         <div>
-          <input value={newTitle} onChange={handleTitleChange} />
+          <input value={newTitle} onChange={handleTitleChange} placeholder='title'/>
         </div>
         Author:
         <div>
-          <input value={newAuthor} onChange={handleAuthorChange} />
+          <input value={newAuthor} onChange={handleAuthorChange} placeholder='author'/>
         </div>
         URL:
         <div>
-          <input value={newURL} onChange={handleURLChange} />
+          <input value={newURL} onChange={handleURLChange} placeholder='url'/>
         </div>
           <button type="submit">save</button>
         </form>
