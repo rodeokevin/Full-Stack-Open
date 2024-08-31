@@ -1,0 +1,74 @@
+const User = require('../models/user')
+const { test, after, beforeEach, describe } = require('node:test')
+const assert = require('node:assert')
+const supertest = require('supertest')
+const mongoose = require('mongoose')
+
+const helper = require('./test_helper')
+const app = require('../app')
+const api = supertest(app)
+
+describe('invalid users shall not be added', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    for (let user of helper.initialUsers) {
+      let userObject = new User(user)
+      await userObject.save()
+    }
+  })
+
+  // 4.16
+  test('invalid username', async () => {
+    const newUser = {
+      username: 'a',
+      name: 'TooShort',
+      password: 'anything'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert.strictEqual(usersAtEnd.length, helper.initialUsers.length)
+  })
+
+  test('invalid password', async () => {
+    const newUser = {
+      username: 'LONGENOUGH',
+      name: 'anything',
+      password: 'b'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert.strictEqual(usersAtEnd.length, helper.initialUsers.length)
+  })
+
+  test('username must be unique', async () => {
+    const newUser = {
+      username: 'kevin',
+      name: 'repeated',
+      password: 'dheuhduehdu'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert.strictEqual(usersAtEnd.length, helper.initialUsers.length)
+  })
+
+  after(async () => {
+    await mongoose.connection.close()
+  })
+})
+
