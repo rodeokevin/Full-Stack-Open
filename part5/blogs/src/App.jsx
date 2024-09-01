@@ -96,9 +96,9 @@ const App = () => {
   // Add a blog
   const addBlog = (blogObject) => {
     blogService
-      .create(blogObject) 
+      .create(blogObject)
       .then(newBlog => {
-        setBlogs(blogs.concat({...newBlog, user: { name: user.name }}))
+        setBlogs(blogs.concat({...newBlog, user: { name: user.name, username: user.username }}))
         setSuccessMessage(`${newBlog.title} by ${newBlog.author} was successfully added`)
         blogFormToggleRef.current.toggleVisibility()
         blogFormRef.current.resetFields()
@@ -149,7 +149,7 @@ const App = () => {
   const blogFormRef = useRef()
   const blogForm = () => (
     <Togglable buttonLabel='new blog' ref={blogFormToggleRef}>
-      <BlogForm createBlog={addBlog} updateBlog={updateBlog} blogs={blogs} ref={blogFormRef}/>
+      <BlogForm createBlog={addBlog} updateBlog={updateBlog} blogs={blogs} ref={blogFormRef} currentUser={user} />
     </Togglable>
   )
 
