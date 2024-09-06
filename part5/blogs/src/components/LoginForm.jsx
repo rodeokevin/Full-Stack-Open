@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 
 const LoginForm = ({
     handleSubmit,
+    handleGuestSubmit,
     handleUsernameChange,
     handlePasswordChange,
     username,
@@ -28,9 +29,11 @@ const LoginForm = ({
              onChange={handlePasswordChange}
              data-testid='password'
            />
-       </div>
-         <button type="submit">login</button>
+          </div>
+          <button type="submit">login</button>
+          
        </form>
+       <button onClick={handleGuestSubmit}>login as guest</button>
      </div>
    )
 }

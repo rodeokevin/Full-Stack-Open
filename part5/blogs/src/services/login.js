@@ -6,4 +6,13 @@ const login = async credentials => {
   return response.data
 }
 
-export default { login }
+const guestLogin = async () => {
+  const guestObject = {
+    username: 'guest',
+    password: 'guest'
+  }
+  const response = await axios.post(baseUrl, guestObject)
+  return response.data
+}
+
+export default { login, guestLogin }

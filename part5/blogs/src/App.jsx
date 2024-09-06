@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from "./components/Blog"
 import BlogForm from "./components/BlogForm"
+import UserForm from "./components/UserForm"
 import ErrorNotif from "./components/ErrorNotif"
 import SuccessNotif from "./components/SuccessNotif"
 import Togglable from "./components/Togglable"
 import LoginForm from "./components/LoginForm"
 import blogService from './services/blogs'
 import loginService from './services/login'
+import userService from './services/user'
 import './index.css'
 
 const App = () => {
@@ -15,6 +17,7 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [users, setUsers] = useState([])
 
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
@@ -35,6 +38,13 @@ const App = () => {
       .catch(error => console.log(error.response.data.error))
   }, [user])
 
+  useEffect(() => {
+    userService
+      .getAll()
+      .then(initialUsers => setUsers(initialUsers))
+      .catch(error => console.log(error.response.data.error))
+  }, [])
+
   // Login
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -52,6 +62,26 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+  const handleGuestSubmit = async () => {    
+    try {
+      const user = await loginService.guestLogin()
+      window.localStorage.setItem(
+        'loggedNoteappUser', JSON.stringify(user)
+      )
+
+      blogService.setToken(user.token)
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch {
+      console.log('there was error A')
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
@@ -134,6 +164,25 @@ const App = () => {
         }, 5000)
       })
   }
+
+  // Add a user
+  const addUser = (userObject) => {
+    userService // [TO DO: CREATE A USER SERVICE]
+      .create(userObject)
+      .then(newUser => {
+        setUsers(users.concat(newUser))
+        setSuccessMessage(`Account for ${newUser.username} was successfully added`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+      })
+      .catch(error => {
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+  }
   
   const loginForm = () => (
     <LoginForm
@@ -142,11 +191,13 @@ const App = () => {
       handleUsernameChange={({ target }) => setUsername(target.value)}
       handlePasswordChange={({ target }) => setPassword(target.value)}
       handleSubmit={handleLogin}
+      handleGuestSubmit={handleGuestSubmit}
     />      
   )
 
   const blogFormToggleRef = useRef()
   const blogFormRef = useRef()
+
   const blogForm = () => (
     <Togglable buttonLabel='new blog' ref={blogFormToggleRef}>
       <BlogForm createBlog={addBlog} updateBlog={updateBlog} blogs={blogs} ref={blogFormRef} currentUser={user} />
@@ -160,6 +211,7 @@ const App = () => {
         <ErrorNotif message={errorMessage} />
         <SuccessNotif message={successMessage} />
         {loginForm()}
+        <UserForm createUser={addUser} users={users} setErrorMessage={setErrorMessage}/>
       </div>
     )
   }

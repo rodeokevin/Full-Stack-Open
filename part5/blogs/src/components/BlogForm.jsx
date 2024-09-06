@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle } from 'react'
 
-const BlogForm = forwardRef(({ updateBlog, createBlog, blogs, currentUser }, refs) => {
+const BlogForm = forwardRef(({ updateBlog, createBlog, blogs }, refs) => {
 
   const [newTitle, setNewTitle] = useState('')
   const handleTitleChange = (event) => {
